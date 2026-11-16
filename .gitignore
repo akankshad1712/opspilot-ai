@@ -1,12 +1,19 @@
-__pycache__/
 .venv/
-.env
-*.pyc
+__pycache__/
 .pytest_cache/
+*.pyc
+.env
+opspilot.db
+node_modules/
+dist/
+.vscode/
+.idea/
+# Local database
+*.db
+
+# Coverage reports
 .coverage
 htmlcov/
-dist/
-build/
-node_modules/
-.idea/
-.vscode/
+
+# Local backup files
+*.bak

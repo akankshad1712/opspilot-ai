@@ -2,17 +2,8 @@
 
 ### Evidence-First Operations Intelligence
 
-> **Investigate incidents with evidence. Reason with context. Automate only when it is safe.**
-
-OpsPilot AI is a production-oriented architecture for turning fragmented operational signals into a structured incident investigation workflow.
-
-It is designed around a simple principle:
-
-**AI should help engineers understand what happened — not invent what happened.**
-
-The platform brings together application logs, API failures, deployment events, support signals, metrics, and human context. It correlates those signals into an investigation timeline, prepares evidence-grounded analysis, proposes next actions, and keeps every important decision auditable.
-
-This repository is intentionally structured as a real engineering system: clear boundaries, explicit contracts, failure handling, security controls, evaluation, observability, and human approval.
+> **Invenext
+aluation, observability, and human approval.
 
 ---
 
