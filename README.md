@@ -1,1037 +1,643 @@
-# OpsPilot AI
+<!--
+  OPSPILOT AI
+  Premium GitHub Project README
+  Visual identity: Midnight / Electric Violet / Cyan
+-->
 
-### Evidence-First Operations Intelligence
+<div align="center">
 
-> **Invenext
-aluation, observability, and human approval.
+# ◈ OPSPILOT AI
 
----
+### THE INTELLIGENCE LAYER FOR OPERATIONAL CLARITY.
 
-## At a Glance
+**From scattered system events to evidence-backed incident intelligence.**
 
-| Layer | Responsibility |
-|---|---|
-| Ingestion | Accept operational events and normalize them |
-| Correlation | Connect related signals into incidents |
-| Investigation | Build an evidence timeline and context |
-| AI Reasoning | Summarize evidence and generate hypotheses |
-| Decision Support | Rank hypotheses and recommend next actions |
-| Policy | Decide what the system may or may not execute |
-| Automation | Execute only approved, safe actions |
-| Audit | Record decisions, actions, outcomes, and evidence |
-| Evaluation | Measure AI behavior independently from application tests |
-| Observability | Make system behavior measurable and diagnosable |
+A modern operations intelligence platform for ingesting events, managing incidents, investigating operational signals, and transforming technical evidence into actionable insights.
 
-### Core design goals
+<br/>
 
-- **Evidence before explanation**
-- **Human approval before consequential automation**
-- **Deterministic workflows around probabilistic AI**
-- **Traceable AI outputs**
-- **Explicit security boundaries**
-- **Recoverable failures**
-- **Measurable quality**
-- **Small, composable services**
-- **Documentation as part of the architecture**
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=111111)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Frontend-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 
----
+<br/>
 
-# 01 · Why OpsPilot?
+[**Explore Repository**](https://github.com/akankshad1712/opspilot-ai)
+&nbsp; ◆ &nbsp;
+[**Author Profile**](https://github.com/akankshad1712)
+&nbsp; ◆ &nbsp;
+[**Connect on LinkedIn**](https://linkedin.com/in/akanksha-deshmukh-26210b244)
 
-Modern incidents rarely arrive as one clean error message.
+<br/>
 
-A single production problem may leave traces across:
-
-```text
-Application logs
-      │
-      ├── API errors
-      ├── database latency
-      ├── deployment events
-      ├── infrastructure metrics
-      ├── support tickets
-      └── human observations
-```
-
-The difficult part is often not collecting another log.
-
-The difficult part is answering:
-
-> **What changed, what is actually supported by evidence, what is only a hypothesis, and what should happen next?**
-
-OpsPilot is designed around that investigation problem.
+</div>
 
 ---
 
-# 02 · Product Philosophy
+<div align="center">
 
-```text
-             ┌───────────────────────────┐
-             │      Operational Data     │
-             │ logs • APIs • deploys     │
-             │ metrics • tickets • events│
-             └─────────────┬─────────────┘
-                           │
-                           ▼
-             ┌───────────────────────────┐
-             │       Normalization       │
-             │ schema • validation       │
-             │ deduplication • metadata  │
-             └─────────────┬─────────────┘
-                           │
-                           ▼
-             ┌───────────────────────────┐
-             │       Correlation         │
-             │ time • service • trace    │
-             │ deployment • dependency   │
-             └─────────────┬─────────────┘
-                           │
-                           ▼
-             ┌───────────────────────────┐
-             │    Evidence Timeline      │
-             │ what happened + when      │
-             │ source + confidence       │
-             └─────────────┬─────────────┘
-                           │
-                           ▼
-             ┌───────────────────────────┐
-             │       AI Analysis         │
-             │ summarize • hypothesize   │
-             │ classify • recommend      │
-             └─────────────┬─────────────┘
-                           │
-                           ▼
-             ┌───────────────────────────┐
-             │       Human Review        │
-             │ approve • reject • modify │
-             └─────────────┬─────────────┘
-                           │
-                    approved only
-                           │
-                           ▼
-             ┌───────────────────────────┐
-             │      Safe Automation      │
-             │ policy • action • result  │
-             └─────────────┬─────────────┘
-                           │
-                           ▼
-             ┌───────────────────────────┐
-             │      Audit + Learning     │
-             │ decision • evidence •     │
-             │ outcome • evaluation      │
-             └───────────────────────────┘
-```
+## ◈ THE BIG IDEA
 
-The architecture deliberately separates **facts**, **inferences**, **recommendations**, and **actions**.
+### Operations should be understandable, not overwhelming.
+
+</div>
+
+Modern software systems generate continuous streams of events, errors, deployments, and operational signals.
+
+The challenge isn't simply collecting those signals. It's understanding which signals matter, how they relate to an incident, and what the evidence actually tells us.
+
+**OpsPilot AI** addresses this challenge through an evidence-first investigation workflow.
+
+Instead of presenting disconnected operational information, the platform connects relevant events to incidents, evaluates investigation signals, calculates confidence, and records the investigation history.
+
+> **Core philosophy:** Every investigation should have evidence. Every recommendation should have context. Every important action should be traceable.
 
 ---
 
-# 03 · System Architecture
+# 01 — PRODUCT EXPERIENCE
 
-```mermaid
-flowchart LR
-    A[Operational Sources] --> B[Ingestion API]
-    B --> C[Event Normalizer]
-    C --> D[Event Bus]
+<div align="center">
 
-    D --> E[Correlation Engine]
-    E --> F[Incident Store]
+### ONE PLATFORM. FOUR OPERATIONAL CAPABILITIES.
 
-    F --> G[Evidence Timeline]
-    G --> H[AI Gateway]
+</div>
 
-    H --> I[Investigation Engine]
-    I --> J[Hypotheses]
-    I --> K[Recommended Actions]
+<table>
+<tr>
+<td width="50%" valign="top">
 
-    J --> L[Policy Engine]
-    K --> L
+### ◉ Event Intelligence
 
-    L --> M{Approval Required?}
-    M -->|Yes| N[Human Approval]
-    M -->|No - Low Risk| O[Safe Automation]
+Collect and organize operational events through REST APIs.
 
-    N --> O
-    O --> P[Execution Worker]
-    P --> Q[Audit Log]
+- Event ingestion
+- Structured event metadata
+- Service and environment context
+- Event retrieval
 
-    G --> Q
-    I --> Q
-    H --> R[AI Evaluation]
-    Q --> S[Observability]
-```
+</td>
+<td width="50%" valign="top">
 
-### Architectural boundary
+### ◈ Incident Management
 
-The LLM/AI layer is **not** the source of truth.
+Create and manage incidents through a centralized workflow.
 
-The source of truth is the operational evidence and the system's persisted state.
+- Incident creation
+- Incident retrieval
+- Incident details
+- Related event association
 
-The AI layer operates on bounded context supplied by the application.
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
 
----
+### ⌁ Evidence-Based Investigation
 
-# 04 · Investigation Lifecycle
+Analyze operational signals using a deterministic investigation engine.
 
-```mermaid
-sequenceDiagram
-    participant Source
-    participant API
-    participant Correlator
-    participant Incident
-    participant AI
-    participant Policy
-    participant Human
-    participant Worker
-    participant Audit
+- Related event filtering
+- Error and deployment signals
+- Confidence scoring
+- Investigation recommendations
 
-    Source->>API: Operational event
-    API->>API: Validate + normalize
-    API->>Correlator: Publish event
-    Correlator->>Incident: Update incident context
-    Incident->>AI: Evidence package
-    AI->>Incident: Findings + hypotheses
-    AI->>Policy: Proposed action
-    Policy->>Human: Approval request
-    Human->>Policy: Approve / Reject / Modify
-    Policy->>Worker: Authorized action
-    Worker->>Audit: Result + execution metadata
-    Audit->>Incident: Update investigation state
-```
+</td>
+<td width="50%" valign="top">
+
+### ◷ Audit Intelligence
+
+Preserve investigation history and operational traceability.
+
+- Incident activity records
+- Investigation history
+- Audit retrieval
+- Structured audit details
+
+</td>
+</tr>
+</table>
 
 ---
 
-# 05 · The Evidence Model
+# 02 — HOW THE SYSTEM THINKS
 
-Every investigation should distinguish between:
+<div align="center">
 
-### Observed fact
+### THE OPSPILOT INVESTIGATION PIPELINE
 
-Something directly supported by a source.
+*From an incoming event to an evidence-backed investigation.*
 
-```text
-Example:
-Deployment 7f31 was released at 14:02 UTC.
-```
-
-### Correlated signal
-
-A relationship derived from multiple observed facts.
-
-```text
-Example:
-Error rate increased within five minutes of deployment 7f31.
-```
-
-### Hypothesis
-
-A possible explanation that still requires validation.
-
-```text
-Example:
-Deployment 7f31 may have introduced the regression.
-```
-
-### Recommendation
-
-A proposed next step.
-
-```text
-Example:
-Compare error traces before and after deployment 7f31.
-```
-
-### Action
-
-An operation that changes a system.
-
-```text
-Example:
-Rollback deployment 7f31.
-```
-
-This distinction prevents a generated explanation from silently becoming an operational fact.
-
----
-
-# 06 · AI Architecture
-
-```text
-                  ┌───────────────────────┐
-                  │     Incident Context  │
-                  └───────────┬───────────┘
-                              │
-                              ▼
-                  ┌───────────────────────┐
-                  │   Context Builder      │
-                  │ scope + evidence       │
-                  └───────────┬───────────┘
-                              │
-                              ▼
-                  ┌───────────────────────┐
-                  │      AI Gateway        │
-                  │ model • timeout •      │
-                  │ retries • token policy │
-                  └───────────┬───────────┘
-                              │
-                              ▼
-                  ┌───────────────────────┐
-                  │ Structured AI Output   │
-                  │ findings               │
-                  │ hypotheses             │
-                  │ confidence             │
-                  │ citations              │
-                  │ recommendations        │
-                  └───────────┬───────────┘
-                              │
-                              ▼
-                  ┌───────────────────────┐
-                  │   Validation Layer    │
-                  │ schema + policy +     │
-                  │ evidence references   │
-                  └───────────┬───────────┘
-                              │
-                              ▼
-                  ┌───────────────────────┐
-                  │     Application       │
-                  │ persists / displays / │
-                  │ routes for approval   │
-                  └───────────────────────┘
-```
-
-### Important AI boundary
-
-The model can propose.
-
-The application decides.
-
-The policy engine authorizes.
-
-The worker executes.
-
-The audit layer records.
-
----
-
-# 07 · Data Flow
+</div>
 
 ```mermaid
 flowchart TD
-    A[Raw Event] --> B{Valid?}
-    B -->|No| C[Rejected Event + Reason]
-    B -->|Yes| D[Canonical Event]
+    A(["Incoming Operational Events"]) --> B["Event Ingestion API"]
+    B --> C[("Structured Event Storage")]
 
-    D --> E[Deduplication]
-    E --> F[Correlation]
-    F --> G[Incident]
+    D(["Incident Created"]) --> E["Incident Management API"]
 
-    G --> H[Evidence Snapshot]
-    H --> I[AI Analysis]
+    C --> F["Evidence Retrieval"]
+    E --> F
 
-    I --> J[Structured Findings]
-    J --> K[Policy Validation]
+    F --> G{"Relevant Evidence Found?"}
 
-    K -->|Rejected| L[Recommendation Only]
-    K -->|Approval Needed| M[Human Review]
-    K -->|Allowed| N[Execution]
+    G -->|"Yes"| H["Service & Environment Matching"]
+    H --> I["Time-Window Filtering"]
+    I --> J["Error & Deployment Signal Analysis"]
 
-    M -->|Approved| N
-    M -->|Rejected| O[Closed Decision]
+    G -->|"No"| K["Limited Evidence Assessment"]
 
-    N --> P[Action Result]
-    P --> Q[Audit Trail]
+    J --> L["Confidence Score Calculation"]
+    K --> L
+
+    L --> M["Investigation Findings"]
+    M --> N["Recommendations"]
+    N --> O[("Investigation Audit History")]
+
+    O --> P(["Operational Insights"])
+
+    classDef input fill:#171A2D,stroke:#8B5CF6,color:#FFFFFF
+    classDef process fill:#10283A,stroke:#22D3EE,color:#FFFFFF
+    classDef decision fill:#332451,stroke:#A78BFA,color:#FFFFFF
+    classDef storage fill:#102E2A,stroke:#34D399,color:#FFFFFF
+    classDef output fill:#20213C,stroke:#818CF8,color:#FFFFFF
+
+    class A,D input
+    class B,E,F,H,I,J,L,M,N process
+    class G decision
+    class C,O storage
+    class P output
 ```
+
+### Investigation logic
+
+The current investigation engine uses deterministic rules rather than claiming to rely on a production LLM.
+
+Its workflow includes:
+
+1. Identifying events associated with the incident's service and environment.
+2. Filtering relevant events within a defined time window.
+3. Evaluating error and deployment signals.
+4. Calculating a confidence score from the available evidence.
+5. Producing findings and recommendations.
+6. Recording investigation activity.
+
+**Current scoring model:** The engine starts with a baseline score, increases it based on relevant error signals and deployment-plus-error combinations, and caps the result at 0.95.
+
+This makes the current investigation workflow understandable, reproducible, and testable.
 
 ---
 
-# 08 · Repository Structure
+# 03 — SYSTEM ARCHITECTURE
+
+<div align="center">
+
+### MODULAR BY DESIGN. EVIDENCE-DRIVEN BY DEFAULT.
+
+</div>
+
+```mermaid
+flowchart TB
+
+    subgraph CLIENT["01  —  PRESENTATION LAYER"]
+        UI["React 19"]
+        TS["TypeScript"]
+        VITE["Vite"]
+        UI --- TS
+        TS --- VITE
+    end
+
+    subgraph API["02  —  APPLICATION LAYER"]
+        FAST["FastAPI"]
+        EVENT["Event Management"]
+        INCIDENT["Incident Management"]
+        INVEST["Investigation Engine"]
+        AUDIT["Audit Logging"]
+
+        FAST --> EVENT
+        FAST --> INCIDENT
+        FAST --> INVEST
+        FAST --> AUDIT
+    end
+
+    subgraph DATA["03  —  DATA LAYER"]
+        ORM["SQLAlchemy ORM"]
+        DB[("SQLite Database")]
+        ORM --> DB
+    end
+
+    CLIENT -->|"HTTP / REST"| API
+    EVENT --> ORM
+    INCIDENT --> ORM
+    INVEST --> ORM
+    AUDIT --> ORM
+
+    classDef frontend fill:#151D38,stroke:#818CF8,color:#FFFFFF
+    classDef backend fill:#102A3D,stroke:#22D3EE,color:#FFFFFF
+    classDef database fill:#102F2B,stroke:#34D399,color:#FFFFFF
+
+    class UI,TS,VITE frontend
+    class FAST,EVENT,INCIDENT,INVEST,AUDIT backend
+    class ORM,DB database
+```
+
+### Architecture characteristics
+
+| Area | Implementation |
+|---|---|
+| Frontend | React + TypeScript |
+| Backend | FastAPI |
+| API style | REST |
+| ORM | SQLAlchemy |
+| Database | SQLite |
+| Investigation | Deterministic evidence-based engine |
+| Testing | Pytest |
+| Coverage | Coverage.py |
+| Containerization | Docker |
+
+---
+
+# 04 — TECHNOLOGY ECOSYSTEM
+
+<div align="center">
+
+### BUILT WITH A PRACTICAL, MODERN ENGINEERING STACK.
+
+</div>
+
+| Technology | Role in the project |
+|---|---|
+| Python | Backend development |
+| FastAPI | REST API and application layer |
+| SQLAlchemy | Database interaction and ORM |
+| SQLite | Default persistent storage |
+| React | Frontend interface |
+| TypeScript | Frontend type safety |
+| Vite | Frontend development and build tooling |
+| Pytest | Automated backend testing |
+| Coverage.py | Test coverage measurement |
+| Docker | Containerization support |
+| Git & GitHub | Version control and collaboration |
+
+---
+
+# 05 — API REFERENCE
+
+<div align="center">
+
+### A CLEAN REST INTERFACE FOR OPERATIONAL WORKFLOWS.
+
+</div>
+
+**Base URL**
+
+```text
+http://127.0.0.1:8000
+```
+
+| Method | Endpoint | Responsibility |
+|:---:|---|---|
+| `GET` | `/health` | Application health check |
+| `POST` | `/api/v1/events` | Ingest an operational event |
+| `GET` | `/api/v1/events` | Retrieve operational events |
+| `GET` | `/api/v1/incidents` | List incidents |
+| `POST` | `/api/v1/incidents` | Create an incident |
+| `GET` | `/api/v1/incidents/{incident_id}` | Retrieve incident details |
+| `POST` | `/api/v1/incidents/{incident_id}/investigate` | Run an investigation |
+| `GET` | `/api/v1/incidents/{incident_id}/audit` | Retrieve audit history |
+
+### Interactive API explorer
+
+Once the backend is running, open:
+
+[**Open Swagger API Documentation →**](http://127.0.0.1:8000/docs)
+
+---
+
+# 06 — PROJECT STRUCTURE
 
 ```text
 opspilot-ai/
 │
-├── README.md
-├── SECURITY.md
-├── LICENSE
-├── .env.example
-├── .gitignore
-├── docker-compose.yml
-│
 ├── apps/
+│   │
 │   ├── api/
-│   ├── worker/
-│   ├── ai_gateway/
-│   └── web/
-│
-├── packages/
-│   ├── domain/
-│   ├── contracts/
-│   ├── policies/
-│   └── telemetry/
-│
-├── infrastructure/
-│   ├── docker/
-│   ├── postgres/
-│   ├── kafka/
-│   └── github-actions/
-│
-├── tests/
-│   ├── unit/
-│   ├── integration/
-│   ├── contract/
-│   ├── evaluation/
-│   └── e2e/
-│
-├── scripts/
+│   │   └── app/
+│   │       ├── config.py
+│   │       ├── database.py
+│   │       ├── engine.py
+│   │       ├── main.py
+│   │       ├── models.py
+│   │       ├── schemas.py
+│   │       └── services.py
+│   │
+│   ├── web/
+│   │   ├── src/
+│   │   │   ├── App.tsx
+│   │   │   ├── main.tsx
+│   │   │   └── styles.css
+│   │   ├── index.html
+│   │   ├── package.json
+│   │   └── vite.config.ts
+│   │
+│   └── worker/
+│       └── main.py
 │
 ├── data/
 │
-└── docs/
-    ├── 00-overview.md
-    ├── 01-requirements.md
-    ├── 02-system-design.md
-    ├── 03-data-model.md
-    ├── 04-api-contracts.md
-    ├── 05-ai-architecture.md
-    ├── 06-security.md
-    ├── 07-reliability.md
-    ├── 08-observability.md
-    ├── 09-evaluation.md
-    ├── 10-adr.md
-    ├── 11-threat-model.md
-    ├── 12-capacity-planning.md
-    └── 13-runbooks.md
+├── docs/
+│   ├── architecture.md
+│   ├── data-model.md
+│   ├── operations.md
+│   └── security.md
+│
+├── tests/
+│   └── test_api.py
+│
+├── .env.example
+├── .gitignore
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+└── README.md
 ```
-
-The repository is intentionally separated into application code, reusable domain contracts, infrastructure, tests, and architecture documentation.
 
 ---
 
-# 09 · Data Model
+# 07 — GETTING STARTED
 
-The logical model is organized around an investigation rather than a single log record.
+<div align="center">
 
-```text
-┌────────────────┐
-│    incidents   │
-└───────┬────────┘
-        │
-        ├───────────────┐
-        ▼               ▼
-┌──────────────┐  ┌───────────────┐
-│   evidence   │  │ hypotheses    │
-└──────┬───────┘  └───────┬───────┘
-       │                  │
-       ▼                  ▼
-┌──────────────┐  ┌───────────────┐
-│ event_refs   │  │ recommendations│
-└──────────────┘  └───────┬───────┘
-                           │
-                           ▼
-                    ┌─────────────┐
-                    │   actions   │
-                    └──────┬──────┘
-                           │
-                           ▼
-                    ┌─────────────┐
-                    │ audit_events│
-                    └─────────────┘
-```
+### YOUR LOCAL OPSPILOT ENVIRONMENT IN A FEW STEPS.
 
-### Core entities
+</div>
 
-| Entity | Purpose |
-|---|---|
-| `incidents` | Investigation lifecycle and state |
-| `events` | Normalized operational signals |
-| `evidence` | Evidence selected for an investigation |
-| `hypotheses` | Candidate explanations |
-| `recommendations` | Proposed next steps |
-| `actions` | Authorized operational actions |
-| `audit_events` | Immutable decision/action history |
-| `users` | Identity and access |
-| `policies` | Automation constraints |
-| `evaluations` | AI quality measurements |
+### Requirements
 
-The complete logical data model is documented in `docs/03-data-model.md`.
+- Python 3.10+
+- Node.js and npm
+- Git
 
----
-
-# 10 · API Design
-
-The API is organized around resources rather than model prompts.
-
-```text
-POST   /api/v1/events
-POST   /api/v1/incidents
-GET    /api/v1/incidents/{incident_id}
-
-GET    /api/v1/incidents/{incident_id}/timeline
-GET    /api/v1/incidents/{incident_id}/evidence
-
-POST   /api/v1/incidents/{incident_id}/investigate
-GET    /api/v1/incidents/{incident_id}/hypotheses
-
-GET    /api/v1/incidents/{incident_id}/recommendations
-
-POST   /api/v1/actions/{action_id}/approve
-POST   /api/v1/actions/{action_id}/reject
-
-GET    /api/v1/audit/events
-GET    /api/v1/health
-GET    /api/v1/ready
-```
-
-The API contract documentation lives in:
-
-`docs/04-api-contracts.md`
-
----
-
-# 11 · Safety Architecture
-
-Automation is treated as a controlled capability.
-
-```mermaid
-flowchart LR
-    A[AI Recommendation] --> B[Action Classifier]
-    B --> C[Policy Engine]
-    C --> D{Risk Level}
-
-    D -->|Informational| E[Return Recommendation]
-    D -->|Low| F[Policy-Allowed Automation]
-    D -->|Medium| G[Human Approval]
-    D -->|High| H[Explicit Authorization]
-    D -->|Blocked| I[Reject]
-
-    G --> J[Execute]
-    H --> J
-    F --> J
-
-    J --> K[Audit]
-    K --> L[Outcome]
-```
-
-### Examples of controls
-
-- Authentication
-- Authorization
-- Role-based access
-- Request validation
-- Rate limiting
-- Action allowlists
-- Idempotency
-- Approval workflows
-- Audit trails
-- Timeouts
-- Retry limits
-- Secret isolation
-- Structured logging
-
-The system should fail toward **non-execution**, not uncontrolled execution.
-
----
-
-# 12 · Reliability
-
-A production system should expect failure.
-
-```text
-External API timeout
-        │
-        ▼
-      Retry
-        │
-        ├── success ──► continue
-        │
-        ▼
-   Retry exhausted
-        │
-        ▼
-   Dead-letter path
-        │
-        ▼
-   Audit + alert
-```
-
-### Reliability principles
-
-**Idempotency**
-
-Repeated events or requests should not accidentally create duplicate operational effects.
-
-**Timeouts**
-
-External dependencies must have bounded execution time.
-
-**Retries**
-
-Retries should be selective and bounded.
-
-**Dead-letter handling**
-
-Messages that cannot be processed should remain inspectable instead of disappearing.
-
-**Graceful degradation**
-
-If AI is unavailable, deterministic incident ingestion and investigation state should remain usable.
-
-**Recovery**
-
-Every asynchronous workflow should have a recovery path.
-
----
-
-# 13 · Observability
-
-Three signals form the operational foundation:
-
-```text
-                 ┌──────────────┐
-                 │   Metrics    │
-                 └──────┬───────┘
-                        │
-┌──────────────┐   ┌───▼────┐   ┌──────────────┐
-│     Logs     │──►│ Service │◄──│    Traces    │
-└──────────────┘   └─────────┘   └──────────────┘
-                        │
-                        ▼
-                 Investigation
-```
-
-Important measurements include:
-
-- Request latency
-- Error rate
-- Queue depth
-- Worker failures
-- AI latency
-- AI token usage
-- Model failure rate
-- Evaluation scores
-- Action approval rate
-- Action failure rate
-- Event processing delay
-- Incident resolution duration
-
-The objective is not simply to know that the system is down.
-
-The objective is to understand **where, why, and what happened next**.
-
----
-
-# 14 · AI Evaluation
-
-Traditional software tests are not enough for AI behavior.
-
-The evaluation layer should test questions such as:
-
-```text
-Did the model use the supplied evidence?
-Did it invent unsupported facts?
-Did it distinguish fact from hypothesis?
-Did it cite the correct evidence?
-Did it produce valid structured output?
-Did it recommend an action outside policy?
-Did it remain useful when evidence was incomplete?
-```
-
-A conceptual evaluation pipeline:
-
-```mermaid
-flowchart TD
-    A[Evaluation Dataset] --> B[Run AI System]
-    B --> C[Collect Structured Output]
-    C --> D[Schema Validation]
-    C --> E[Evidence Grounding Check]
-    C --> F[Policy Check]
-    C --> G[Quality Scoring]
-    D --> H[Evaluation Report]
-    E --> H
-    F --> H
-    G --> H
-```
-
-Evaluation datasets should be versioned.
-
-Changes to prompts, models, retrieval logic, or policies should be measurable rather than judged only by intuition.
-
----
-
-# 15 · Security Model
-
-Security is part of the system design, not a final checklist.
-
-```text
-Identity
-   │
-   ▼
-Authentication
-   │
-   ▼
-Authorization / RBAC
-   │
-   ▼
-Resource Access
-   │
-   ▼
-Policy Validation
-   │
-   ▼
-Audited Action
-```
-
-Security boundaries include:
-
-- API authentication
-- RBAC
-- Secret management
-- Input validation
-- Dependency controls
-- Rate limiting
-- Audit logging
-- Secure defaults
-- Least privilege
-- Network isolation
-- Safe action policies
-
-See `SECURITY.md` and `docs/06-security.md`.
-
----
-
-# 16 · Failure Modes
-
-OpsPilot explicitly considers failure as part of normal operation.
-
-| Failure | Expected behavior |
-|---|---|
-| Invalid event | Reject with structured reason |
-| Duplicate event | Deduplicate safely |
-| Database unavailable | Fail without losing uncommitted work |
-| AI provider unavailable | Preserve deterministic workflow |
-| AI timeout | Return controlled failure |
-| Invalid AI output | Reject before persistence/action |
-| Unauthorized action | Block |
-| Worker crash | Retry/recover through queue |
-| Action failure | Persist result and surface failure |
-| Missing evidence | State uncertainty rather than inventing evidence |
-
----
-
-# 17 · Decision Records
-
-Architectural decisions are documented instead of hidden inside implementation.
-
-Examples include:
-
-```text
-Why event-driven processing?
-Why PostgreSQL?
-Why an AI gateway?
-Why structured AI output?
-Why human approval?
-Why evidence lineage?
-Why separate evaluation from application tests?
-```
-
-Decision records live in:
-
-`docs/10-adr.md`
-
-This makes the reasoning behind the architecture reviewable.
-
----
-
-# 18 · Local Development
-
-The repository is designed to support local development through Docker-based infrastructure.
+### Step 01 — Clone the repository
 
 ```bash
 git clone https://github.com/akankshad1712/opspilot-ai.git
+
 cd opspilot-ai
-
-cp .env.example .env
-
-docker compose up --build
 ```
 
-The exact service implementation and environment requirements will evolve as the system is implemented.
+### Step 02 — Configure the backend
 
----
+Create a Python virtual environment:
 
-# 19 · Development Workflow
+**Windows PowerShell**
+
+```powershell
+python -m venv .venv
+```
+
+Activate the environment:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+Install Python dependencies:
+
+```powershell
+pip install -r requirements.txt
+```
+
+### Step 03 — Start the backend
+
+From the project root:
+
+```powershell
+python -m uvicorn apps.api.app.main:app --reload
+```
+
+Backend:
 
 ```text
-Issue
-  │
-  ▼
-Design
-  │
-  ▼
-Implementation
-  │
-  ▼
-Unit Tests
-  │
-  ▼
-Integration Tests
-  │
-  ▼
-Contract Tests
-  │
-  ▼
-AI Evaluation
-  │
-  ▼
-Security Review
-  │
-  ▼
-Observability Review
-  │
-  ▼
-Pull Request
-  │
-  ▼
-CI
-  │
-  ▼
-Merge
+http://127.0.0.1:8000
 ```
 
-A feature is not considered complete simply because the happy path works.
-
-The surrounding failure modes, tests, observability, and documentation matter too.
-
----
-
-# 20 · Testing Strategy
+API documentation:
 
 ```text
-                  ┌──────────────┐
-                  │    E2E       │
-                  └──────┬───────┘
-                         │
-                  ┌──────▼───────┐
-                  │ Integration  │
-                  └──────┬───────┘
-                         │
-                  ┌──────▼───────┐
-                  │   Contract   │
-                  └──────┬───────┘
-                         │
-                  ┌──────▼───────┐
-                  │     Unit     │
-                  └──────────────┘
+http://127.0.0.1:8000/docs
 ```
 
-AI-specific evaluation runs alongside conventional software testing.
+### Step 04 — Configure the frontend
 
-The objective is to validate both:
+Open a separate terminal:
 
-1. **Does the software behave correctly?**
-2. **Does the AI behave acceptably within defined boundaries?**
+```powershell
+cd apps/web
+```
 
----
+Install frontend dependencies:
 
-# 21 · Performance Thinking
+```powershell
+npm install
+```
 
-Capacity planning starts with measurable assumptions.
+Start the frontend:
+
+```powershell
+npm run dev
+```
+
+Frontend:
 
 ```text
-Incoming events
-       │
-       ▼
- Ingestion rate
-       │
-       ▼
- Queue capacity
-       │
-       ▼
- Worker throughput
-       │
-       ▼
- Database write capacity
-       │
-       ▼
- AI request capacity
+http://localhost:5173
 ```
 
-No performance number is presented here as a measured benchmark.
+### Step 05 — Verify the application
 
-Production capacity should be derived from actual load tests, workload characteristics, infrastructure limits, and observed bottlenecks.
+Check the health endpoint:
 
-See `docs/12-capacity-planning.md`.
+```text
+http://127.0.0.1:8000/health
+```
 
----
-
-# 22 · Runbooks
-
-Operational knowledge should be executable by another engineer.
-
-Runbooks cover scenarios such as:
-
-- API unavailable
-- Queue backlog
-- Database connectivity failure
-- AI provider outage
-- Worker crash loop
-- Duplicate event spike
-- High latency
-- Failed remediation
-- Audit inconsistency
-- Evaluation regression
-
-See:
-
-`docs/13-runbooks.md`
+Open the frontend and Swagger interface to explore the application.
 
 ---
 
-# 23 · Documentation Map
+# 08 — TESTING & QUALITY ENGINEERING
 
-| Document | Purpose |
+<div align="center">
+
+### QUALITY IS MEASURED, NOT ASSUMED.
+
+</div>
+
+OpsPilot AI includes automated backend tests covering the core application workflows.
+
+### Run the test suite
+
+```powershell
+python -m pytest -v
+```
+
+### Generate coverage results
+
+```powershell
+python -m coverage run --branch --source=apps.api.app -m pytest -v
+
+python -m coverage report -m
+```
+
+### Verified backend results
+
+<table>
+<tr>
+<td align="center" width="33%">
+
+# 15
+
+**Passing Tests**
+
+</td>
+<td align="center" width="33%">
+
+# 100%
+
+**Statement Coverage**
+
+</td>
+<td align="center" width="33%">
+
+# 100%
+
+**Branch Coverage**
+
+</td>
+</tr>
+</table>
+
+Coverage was measured across the `apps.api.app` backend package.
+
+The test suite covers:
+
+- Health endpoint
+- Event ingestion and retrieval
+- Incident creation and retrieval
+- Investigation workflows
+- Related event filtering
+- Repeated investigations
+- Audit history
+- Database session lifecycle
+
+*These coverage figures apply to the backend package, not the React frontend.*
+
+---
+
+# 09 — ENGINEERING PRINCIPLES
+
+| Principle | How OpsPilot AI applies it |
 |---|---|
-| `00-overview.md` | System context |
-| `01-requirements.md` | Functional and non-functional requirements |
-| `02-system-design.md` | Architecture decisions and boundaries |
-| `03-data-model.md` | Entities and relationships |
-| `04-api-contracts.md` | API design |
-| `05-ai-architecture.md` | AI integration and boundaries |
-| `06-security.md` | Security architecture |
-| `07-reliability.md` | Failure handling and recovery |
-| `08-observability.md` | Metrics, logs, traces |
-| `09-evaluation.md` | AI evaluation strategy |
-| `10-adr.md` | Architecture decision records |
-| `11-threat-model.md` | Threat analysis |
-| `12-capacity-planning.md` | Capacity assumptions |
-| `13-runbooks.md` | Operational procedures |
+| Evidence First | Investigations use related operational events |
+| Deterministic Logic | Current scoring and investigation rules are reproducible |
+| Traceability | Audit records preserve investigation activities |
+| Modularity | API, frontend, worker, and data concerns are separated |
+| Testability | Backend behavior is verified with automated tests |
+| Transparency | Findings and confidence are based on explicit signals |
 
 ---
 
-# 24 · Engineering Principles
+# 10 — ROADMAP
 
-### 01 — Evidence over confidence
+<div align="center">
 
-A confident answer without evidence is still an unreliable answer.
+### THE NEXT EVOLUTION OF OPERATIONAL INTELLIGENCE.
 
-### 02 — AI is a component, not the architecture
+</div>
 
-The surrounding software determines what the AI is allowed to see, decide, and do.
+The following are planned enhancements, not features claimed as complete.
 
-### 03 — Human control for consequential actions
+```mermaid
+flowchart LR
+    A["Current MVP"] --> B["Streaming Integration"]
+    B --> C["Advanced Observability"]
+    C --> D["AI-Assisted Analysis"]
+    D --> E["Automated Remediation"]
 
-The system should make automation safer, not make humans disappear from important decisions.
+    classDef current fill:#123A32,stroke:#34D399,color:#FFFFFF
+    classDef future fill:#171A30,stroke:#818CF8,color:#FFFFFF
 
-### 04 — Every important action leaves a trail
-
-If the system makes or executes a meaningful decision, the reasoning context and outcome should be recoverable.
-
-### 05 — Failure is designed, not discovered
-
-Timeouts, retries, duplicate events, provider failures, malformed AI responses, and partial execution are architectural cases.
-
-### 06 — Measure before claiming
-
-Performance, accuracy, reliability, and AI quality should be reported from actual measurements.
-
----
-
-# 25 · Project Status
-
-**Current repository stage:** Architecture and engineering documentation foundation.
-
-The repository currently establishes:
-
-- System architecture
-- Data model
-- API boundaries
-- AI architecture
-- Security model
-- Reliability model
-- Observability strategy
-- Evaluation strategy
-- Threat model
-- Capacity planning approach
-- Operational runbooks
-- Decision-record structure
-
-Implementation should be added incrementally and documented as it becomes real.
-
-No production benchmark, accuracy percentage, uptime figure, or completed feature should be claimed unless it has actually been implemented and measured.
-
----
-
-# 26 · Roadmap
-
-```text
-FOUNDATION
-   │
-   ├── Repository architecture
-   ├── Domain contracts
-   └── Documentation
-   │
-   ▼
-CORE PLATFORM
-   │
-   ├── FastAPI
-   ├── PostgreSQL
-   ├── Event ingestion
-   └── Incident lifecycle
-   │
-   ▼
-INTELLIGENCE
-   │
-   ├── Evidence correlation
-   ├── AI gateway
-   ├── Investigation engine
-   └── Structured findings
-   │
-   ▼
-SAFE AUTOMATION
-   │
-   ├── Policy engine
-   ├── Human approval
-   ├── Action workers
-   └── Audit trail
-   │
-   ▼
-PRODUCTION HARDENING
-   │
-   ├── Observability
-   ├── Evaluation
-   ├── Security testing
-   ├── Load testing
-   └── CI/CD
+    class A current
+    class B,C,D,E future
 ```
 
+### Planned directions
+
+- [ ] Kafka-based event streaming
+- [ ] Redis caching and performance improvements
+- [ ] PostgreSQL deployment configuration
+- [ ] AI/LLM-assisted incident analysis
+- [ ] Advanced observability integrations
+- [ ] Authentication and role-based access control
+- [ ] Automated incident remediation
+- [ ] Expanded frontend and integration tests
+
 ---
 
-# 27 · Repository Identity
+# 11 — PROJECT DOCUMENTATION
 
-**Project:** OpsPilot AI  
-**Focus:** Evidence-first incident intelligence  
-**Architecture:** Event-driven, API-first, policy-controlled  
-**AI principle:** Grounded reasoning with explicit uncertainty  
-**Automation principle:** Approval-aware and auditable  
-**Engineering principle:** Reliability before convenience
+Explore the technical documentation:
+
+| Document | Focus |
+|---|---|
+| [Architecture](docs/architecture.md) | System architecture |
+| [Data Model](docs/data-model.md) | Database structure |
+| [Operations](docs/operations.md) | Operational guidance |
+| [Security](docs/security.md) | Security considerations |
 
 ---
 
-## Built to be understandable by humans.
+# 12 — ABOUT THE CREATOR
 
-The most valuable systems are not the ones with the most complicated diagrams.
+<div align="center">
 
-They are the ones where another engineer can answer:
+## AKANKSHA DESHMUKH
 
-**What is happening?**
+### Software Developer | Backend Engineering | Full-Stack Development
 
-**Why is it happening?**
+Building practical software systems with an interest in backend architecture, APIs, distributed systems concepts, and AI-assisted engineering.
 
-**What evidence supports that conclusion?**
+<br/>
 
-**What can the system safely do?**
+[![GitHub](https://img.shields.io/badge/GitHub-akankshad1712-181717?style=for-the-badge&logo=github)](https://github.com/akankshad1712)
 
-**Who approved it?**
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Akanksha_Deshmukh-0A66C2?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/akanksha-deshmukh-26210b244)
 
-**What happened after it ran?**
+[![Portfolio](https://img.shields.io/badge/Portfolio-Visit_Website-7C3AED?style=for-the-badge&logo=googlechrome&logoColor=white)](https://akankshadeshmukh.com)
 
-OpsPilot AI is designed around those questions.
+[![LeetCode](https://img.shields.io/badge/LeetCode-Kanksha17-FFA116?style=for-the-badge&logo=leetcode&logoColor=black)](https://leetcode.com/u/Kanksha17/)
+
+</div>
+
+---
+
+<div align="center">
+
+# ◈ OPSPILOT AI
+
+### SEE THE SIGNAL. UNDERSTAND THE INCIDENT. FOLLOW THE EVIDENCE.
+
+**Turning operational complexity into actionable clarity.**
+
+<br/>
+
+Built with curiosity, engineering discipline, and a focus on meaningful software.
+
+<br/>
+
+<sub>© 2026 Akanksha Deshmukh · Licensed under the MIT License</sub>
+
+</div>
